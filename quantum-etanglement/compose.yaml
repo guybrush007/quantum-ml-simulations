@@ -42,7 +42,7 @@ x-airflow-common:
 
 services:
   jupyterlab:
-    image: jupyter/datascience-notebook:latest
+    image: jupyter/tensorflow-notebook:latest
     environment:
       - JUPYTER_ENABLE_LAB=yes
     ports:
@@ -50,7 +50,7 @@ services:
     volumes:
       - jupyterlab-data:/home/jovyan/work
     command: >
-      bash -c "pip install qutip &&
+      bash -c "pip install qutip && pip install qutip-qip &&
                start-notebook.sh --NotebookApp.token=''"
 
   mlflow:
