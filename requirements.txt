@@ -1,3 +1,5 @@
-qutip
-mlflow
-tensorflow
+mlflow==2.11.3
+qutip==4.7.5
+scikit-learn==1.4.1.post1
+sympy==1.12
+tensorflow==2.16.1
