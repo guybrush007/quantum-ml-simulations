@@ -1,2 +1,3 @@
 # quantum-ml-simulations
-Several quantum simulations using ML methods
+Several quantum simulations using ML methods:
+- quantum etanglement
