@@ -42,7 +42,7 @@ x-airflow-common:
 
 services:
   jupyterlab:
-    image: jupyter/tensorflow-notebook:latest
+    image: jupyter/datascience-notebook:latest
     environment:
       - JUPYTER_ENABLE_LAB=yes
     ports:
