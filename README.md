@@ -7,4 +7,4 @@ Personal projects to learn and to explore ML/MLOps techniques applied to quantum
 - Simulation of 2-qubits (not) entangled states using QuTiP
 - Implementation of entanglement witnesses (CHSH, concurrence, entropy and negativity)
 - Training of a Tensorflow neural network using the simulated data and the various witnesses
-- Tests on maximally entangled, partially entangled  and not entangled states
+- Tests on maximally entangled, partially entangled and not entangled, pure or mixed states
