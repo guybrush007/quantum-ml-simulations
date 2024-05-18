@@ -164,3 +164,4 @@ quantum-etanglement/logs/
 quantum-etanglement/dags/
 quantum-etanglement/config/
 quantum-etanglement/plugins/
+quantum-entanglement/mlruns/
