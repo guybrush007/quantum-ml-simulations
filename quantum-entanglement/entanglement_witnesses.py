@@ -1,7 +1,7 @@
 from qutip import basis, tensor, sigmax, sigmay, sigmaz, concurrence, entropy_vn, partial_transpose
 import numpy as np
 
-def is_entangled_chsh(state, tolerance=1e-10):
+def is_entangled_chsh(state):
     A_1 = sigmaz()
     A_2 = sigmax()
     B_1 = (sigmaz() + sigmax()) / np.sqrt(2)
@@ -22,9 +22,9 @@ def is_entangled_chsh(state, tolerance=1e-10):
     
     chsh_operators ={"CHSH_ZX": CHSH_ZX, "CHSH_YZ": CHSH_YZ, "CHSH_XY": CHSH_XY}
 
-    for chsh_basis, chsh_operator in chsh_operators.items():
+    for _, chsh_operator in chsh_operators.items():
         violation = np.abs(state.dag() * chsh_operator * state)
-        if violation > (2 + tolerance):
+        if violation > 2:
             return True
     return False
 
