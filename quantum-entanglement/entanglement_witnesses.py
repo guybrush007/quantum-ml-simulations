@@ -22,7 +22,7 @@ def is_entangled_chsh(state):
     
     chsh_operators ={"CHSH_ZX": CHSH_ZX, "CHSH_YZ": CHSH_YZ, "CHSH_XY": CHSH_XY}
 
-    for _, chsh_operator in chsh_operators.items():
+    for chsh_basis, chsh_operator in chsh_operators.items():
         violation = np.abs(state.dag() * chsh_operator * state)
         if violation > 2:
             return True
@@ -46,11 +46,9 @@ def is_entangled_negativity(state, tolerance=1e-10):
     negativity = sum(abs(e) for e in eigenvalues if e < 0)
     return negativity > tolerance
 
-all_entanglement_witnesses = {
-    "CHSH": is_entangled_chsh,
+witnesses = {
     "CONCURRENCE": is_entangled_concurrence,
     "ENTROPY": is_entangled_entropy,
-    "NEGATIVITY": is_entangled_negativity
-    }
-
-
+    "NEGATIVITY": is_entangled_negativity,
+    "CHSH": is_entangled_chsh
+}
