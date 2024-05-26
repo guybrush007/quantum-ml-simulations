@@ -1,6 +1,5 @@
 from airflow.decorators import dag
 from airflow.providers.docker.operators.docker import DockerOperator
-from docker.types import Mount
 from datetime import datetime, timedelta
 
 default_args = {
@@ -25,22 +24,22 @@ def quantum_entanglement_classifier_ml_pipeline():
     for witness_name in witness_names:
         run_simulation_task = DockerOperator(
             task_id=f'run_simulation-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.0.3', 
+            image='ghcr.io/guybrush007/quantum-entanglement:0.0.5', 
             api_version='auto',
             auto_remove=False,
             command=f"papermill /home/jovyan/00-Simulation.ipynb /home/jovyan/EXECUTED-00-Simulation-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p SIMULATION_PATH /home/jovyan",
             docker_url='unix://var/run/docker.sock',
-            network_mode='host'
+            network_mode='host',
         )
 
         run_training_task = DockerOperator(
             task_id=f'run_training-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.0.3', 
+            image='ghcr.io/guybrush007/quantum-entanglement:0.0.5', 
             api_version='auto',
             auto_remove=False,
             command=f"papermill /home/jovyan/01-Training.ipynb /home/jovyan/EXECUTED-01-Training-{witness_name}.ipynb -p WITNESS_NAME {witness_name}",
             docker_url='unix://var/run/docker.sock',
-            network_mode='host'
+            network_mode='host',
         )
 
         run_simulation_task >> run_training_task

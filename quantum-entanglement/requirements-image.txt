@@ -4,3 +4,4 @@ qutip-qtrl==0.1.1
 mlflow==2.12.2
 tensorflow==2.16.1
 papermill
+minio==7.2.7
