@@ -11,4 +11,4 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm upgrade postgres bitnami/postgresql --namespace airflow --create-namespace --install --values values_postgres.yaml
 
 # Install MLFlow
-helm upgrade --install mlflow community-charts/mlflow --namespace mlflow  --create-namespace  --values values_mlflow.yaml
+helm upgrade --install mlflow community-charts/mlflow --namespace mlflow  --create-namespace  --valuesclea values_mlflow.yaml
