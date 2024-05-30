@@ -10,7 +10,7 @@ default_args = {
     'start_date': datetime(2023, 1, 1),
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 0,
     'retry_delay': timedelta(minutes=5),
 }
 
@@ -47,7 +47,7 @@ def quantum_entanglement_classifier_ml_pipeline():
                 "-p", "AIRFLOW_DAG_RUN_ID", airflow_dag_run_id,
                 "-p", "MLFLOW_URL", "http://mlflow.mlflow:5000"
             ],
-            is_delete_operator_pod=True,
+            is_delete_operator_pod=False,
             get_logs=True,
         )
 
@@ -65,7 +65,7 @@ def quantum_entanglement_classifier_ml_pipeline():
                 "-p", "AIRFLOW_DAG_RUN_ID", airflow_dag_run_id,
                 "-p", "MLFLOW_URL", "http://mlflow.mlflow:5000"
             ],
-            is_delete_operator_pod=True,
+            is_delete_operator_pod=False,
             get_logs=True,
         )
 
