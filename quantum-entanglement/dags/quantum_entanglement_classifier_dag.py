@@ -1,12 +1,11 @@
 from airflow.decorators import dag, task
-from airflow.providers.docker.operators.docker import DockerOperator
-from airflow.operators.python import PythonOperator
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from datetime import datetime, timedelta
 import uuid
 
 # Default arguments for the DAG
 default_args = {
-    'owner': 'faical',
+    'owner': 'admin',
     'depends_on_past': False,
     'start_date': datetime(2023, 1, 1),
     'email_on_failure': False,
@@ -34,31 +33,40 @@ def quantum_entanglement_classifier_ml_pipeline():
         airflow_dag_run_id = generate_airflow_dag_run_id()
 
         # Task to run the simulation
-        run_simulation_task = DockerOperator(
+        run_simulation_task = KubernetesPodOperator(
             task_id=f'run_simulation-{witness_name}',
+            name=f'run-simulation-{witness_name}',
+            namespace='airflow',
             image='ghcr.io/guybrush007/quantum-entanglement:0.1.0',
-            api_version='auto',
-            auto_remove=True,
-            command=(
-                f"papermill /home/jovyan/00-Simulation.ipynb /home/jovyan/EXECUTED-00-Simulation-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p SIMULATION_PATH /home/jovyan -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id} -p MLFLOW_URL http://mlflow.mlflow:5000"
-            ),
-            docker_url='unix://var/run/docker.sock',
-            network_mode='host',
-            mount_tmp_dir=False,
+            cmds=["papermill"],
+            arguments=[
+                "/home/jovyan/00-Simulation.ipynb",
+                f"/home/jovyan/EXECUTED-00-Simulation-{witness_name}.ipynb",
+                "-p", "WITNESS_NAME", witness_name,
+                "-p", "SIMULATION_PATH", "/home/jovyan",
+                "-p", "AIRFLOW_DAG_RUN_ID", airflow_dag_run_id,
+                "-p", "MLFLOW_URL", "http://mlflow.mlflow:5000"
+            ],
+            is_delete_operator_pod=True,
+            get_logs=True,
         )
 
         # Task to run the training
-        run_training_task = DockerOperator(
+        run_training_task = KubernetesPodOperator(
             task_id=f'run_training-{witness_name}',
+            name=f'run-training-{witness_name}',
+            namespace='airflow',
             image='ghcr.io/guybrush007/quantum-entanglement:0.1.0',
-            api_version='auto',
-            auto_remove=True,
-            command=(
-                f"papermill /home/jovyan/01-Training.ipynb /home/jovyan/EXECUTED-01-Training-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id} -p MLFLOW_URL http://mlflow.mlflow:5000"
-            ),
-            docker_url='unix://var/run/docker.sock',
-            network_mode='host',
-            mount_tmp_dir=False,
+            cmds=["papermill"],
+            arguments=[
+                "/home/jovyan/01-Training.ipynb",
+                f"/home/jovyan/EXECUTED-01-Training-{witness_name}.ipynb",
+                "-p", "WITNESS_NAME", witness_name,
+                "-p", "AIRFLOW_DAG_RUN_ID", airflow_dag_run_id,
+                "-p", "MLFLOW_URL", "http://mlflow.mlflow:5000"
+            ],
+            is_delete_operator_pod=True,
+            get_logs=True,
         )
 
         airflow_dag_run_id >> run_simulation_task >> run_training_task
