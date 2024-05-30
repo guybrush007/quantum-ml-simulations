@@ -6,3 +6,5 @@ tensorflow==2.16.1
 papermill
 minio==7.2.7
 apache-airflow==2.9.1
+boto
+boto3

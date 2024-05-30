@@ -37,7 +37,7 @@ def quantum_entanglement_classifier_ml_pipeline():
             task_id=f'run_simulation-{witness_name}',
             name=f'run-simulation-{witness_name}',
             namespace='airflow',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.0',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.1.1',
             cmds=["papermill"],
             arguments=[
                 "/home/jovyan/00-Simulation.ipynb",
@@ -56,7 +56,7 @@ def quantum_entanglement_classifier_ml_pipeline():
             task_id=f'run_training-{witness_name}',
             name=f'run-training-{witness_name}',
             namespace='airflow',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.0',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.1.1',
             cmds=["papermill"],
             arguments=[
                 "/home/jovyan/01-Training.ipynb",
