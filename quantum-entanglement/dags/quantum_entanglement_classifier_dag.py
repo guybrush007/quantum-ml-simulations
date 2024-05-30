@@ -40,7 +40,7 @@ def quantum_entanglement_classifier_ml_pipeline():
             api_version='auto',
             auto_remove=True,
             command=(
-                f"papermill /home/jovyan/00-Simulation.ipynb /home/jovyan/EXECUTED-00-Simulation-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p SIMULATION_PATH /home/jovyan -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id}"
+                f"papermill /home/jovyan/00-Simulation.ipynb /home/jovyan/EXECUTED-00-Simulation-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p SIMULATION_PATH /home/jovyan -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id} -p MLFLOW_URL http://mlflow.mlflow:5000"
             ),
             docker_url='unix://var/run/docker.sock',
             network_mode='host',
@@ -54,7 +54,7 @@ def quantum_entanglement_classifier_ml_pipeline():
             api_version='auto',
             auto_remove=True,
             command=(
-                f"papermill /home/jovyan/01-Training.ipynb /home/jovyan/EXECUTED-01-Training-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id}"
+                f"papermill /home/jovyan/01-Training.ipynb /home/jovyan/EXECUTED-01-Training-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id} -p MLFLOW_URL http://mlflow.mlflow:5000"
             ),
             docker_url='unix://var/run/docker.sock',
             network_mode='host',
