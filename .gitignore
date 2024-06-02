@@ -160,3 +160,5 @@ quantum-etanglement/config/
 quantum-etanglement/plugins/
 quantum-entanglement/mlflow/
 quantum-entanglement/minio/
+quantum-entanglement/config/*
+quantum-entanglement/logs/*
