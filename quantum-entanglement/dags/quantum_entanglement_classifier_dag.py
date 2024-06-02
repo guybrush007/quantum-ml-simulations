@@ -36,7 +36,7 @@ def quantum_entanglement_classifier_ml_pipeline():
         # Task to run the simulation
         run_simulation_task = DockerOperator(
             task_id=f'run_simulation-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.5',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.2.0',
             api_version='auto',
             auto_remove=True,
             command=(
@@ -50,7 +50,7 @@ def quantum_entanglement_classifier_ml_pipeline():
         # Task to run the training
         run_training_task = DockerOperator(
             task_id=f'run_training-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.5',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.2.0',
             api_version='auto',
             auto_remove=True,
             command=(
@@ -61,6 +61,20 @@ def quantum_entanglement_classifier_ml_pipeline():
             mount_tmp_dir=False,
         )
 
-        airflow_dag_run_id >> run_simulation_task >> run_training_task
+        # Task to run prediction 
+        run_predict_task = DockerOperator(
+            task_id=f'run_predict-{witness_name}',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.2.0',
+            api_version='auto',
+            auto_remove=True,
+            command=(
+                f"papermill /home/jovyan/02-Predict.ipynb /home/jovyan/EXECUTED-02-Predict-{witness_name}.ipynb -p WITNESS_NAME {witness_name} -p AIRFLOW_DAG_RUN_ID {airflow_dag_run_id} -p MLFLOW_URL http://localhost:5000"
+            ),
+            docker_url='unix://var/run/docker.sock',
+            network_mode='host',
+            mount_tmp_dir=False,
+        )
+
+        airflow_dag_run_id >> run_simulation_task >> run_training_task >> run_predict_task
 
 dag = quantum_entanglement_classifier_ml_pipeline()
