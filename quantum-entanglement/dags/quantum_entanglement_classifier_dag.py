@@ -36,7 +36,7 @@ def quantum_entanglement_classifier_ml_pipeline():
         # Task to run the simulation
         run_simulation_task = DockerOperator(
             task_id=f'run_simulation-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.3',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.1.5',
             api_version='auto',
             auto_remove=True,
             command=(
@@ -50,7 +50,7 @@ def quantum_entanglement_classifier_ml_pipeline():
         # Task to run the training
         run_training_task = DockerOperator(
             task_id=f'run_training-{witness_name}',
-            image='ghcr.io/guybrush007/quantum-entanglement:0.1.3',
+            image='ghcr.io/guybrush007/quantum-entanglement:0.1.5',
             api_version='auto',
             auto_remove=True,
             command=(
