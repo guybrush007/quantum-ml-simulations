@@ -31,6 +31,41 @@ def is_entangled_chsh(state, tolerance=1e-10):
             return True
     return False
 
+
+def is_entangled_chsh_optimal(state, tolerance=1e-10):
+    # Convert pure state to density matrix if necessary
+    if state.isket:
+        state = state * state.dag()
+
+    # Define Pauli matrices
+    sigma = [sigmax(), sigmay(), sigmaz()]
+
+    # Calculate the correlation tensor T_rho
+    T_rho = np.zeros((3, 3))
+    for i in range(3):
+        for j in range(3):
+            T_rho[i, j] = (state * tensor(sigma[i], sigma[j])).tr().real
+
+    # Calculate T_rho^T * T_rho
+    T_rho_transpose = T_rho.T
+    T_rho_product = np.dot(T_rho_transpose, T_rho)
+
+    # Compute the eigenvalues
+    eigenvalues = np.linalg.eigvalsh(T_rho_product)
+
+    # Sort the eigenvalues in descending order and take the two largest
+    sorted_eigenvalues = sorted(eigenvalues, reverse=True)
+    t1, t2 = sorted_eigenvalues[:2]
+
+    # Calculate M(rho)
+    M_rho = np.sqrt(t1 + t2)
+
+    # Check for CHSH inequality violation
+    if M_rho > 1 + tolerance:
+        return True
+    return False
+
+
 def is_entangled_concurrence(state):
     if state.isket:
         state = state * state.dag() 
@@ -56,5 +91,6 @@ witnesses = {
     "CONCURRENCE": is_entangled_concurrence,
     "ENTROPY": is_entangled_entropy,
     "NEGATIVITY": is_entangled_negativity,
+    "CHSH_OPTIMAL": is_entangled_chsh_optimal,
     "CHSH": is_entangled_chsh
 }

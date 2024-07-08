@@ -18,11 +18,11 @@ def create_not_entangled_pure_state_dm():
     pure_state = create_not_entangled_pure_state()
     return pure_state * pure_state.dag()
 
-def create_mixed_bell_state_dm(probability):
+def create_mixed_bell_state_dm():
     phi_plus = (tensor(basis(2, 0), basis(2, 0)) + tensor(basis(2, 1), basis(2, 1)))/np.sqrt(2)
-    if probability is None:
-        probability = np.random.rand()
-    return (probability * phi_plus * phi_plus.dag() + (1-probability) * qeye(dimensions=[[2, 2]]))
+    phi_minus = (tensor(basis(2, 0), basis(2, 0)) - tensor(basis(2, 1), basis(2, 1)))/np.sqrt(2)
+    p = np.random.rand()
+    return (p * phi_plus * phi_plus.dag() + (1-p) * phi_minus * phi_minus.dag())
 
 def create_mixed_not_entangled_state_dm():
     not_entangled_1 = tensor(rand_ket(2), rand_ket(2)).unit()
@@ -35,45 +35,49 @@ phi_minus = bell_states[1]
 psi_plus = bell_states[2]
 psi_minus = bell_states[3]
 
+def create_entangled_werner_state_dm():
+    p = 1/np.sqrt(2) + (1-1/np.sqrt(2)) * np.random.rand()
+    print(f"psi_minus {psi_minus}")
+    return p * psi_minus * psi_minus.dag() + (1-p) * qeye(dimensions=[[2, 2]]) / 4
+
+def create_not_entangled_werner_state_dm():
+    p = np.random.rand() / np.sqrt(2)
+    print(f"psi_minus {psi_minus}")
+    return p * psi_minus * psi_minus.dag() + (1-p) * qeye(dimensions=[[2, 2]]) / 4
+
 
 @pytest.mark.parametrize("witness", witnesses.values())
-def test_is_entangled_werner_state_dm(witness):
-    state = create_werner_state_dm()
+def test_is_entangled_entangled_werner_state_dm(witness):
+    state = create_entangled_werner_state_dm()
     is_entangled = witness(state)
-    assert is_entangled is True
+    assert is_entangled == True
+
+@pytest.mark.parametrize("witness", witnesses.values())
+def test_is_not_entangled_entangled_werner_state_dm(witness):
+    state = create_not_entangled_werner_state_dm()
+    is_entangled = witness(state)
+    assert is_entangled == False
 
 @pytest.mark.parametrize("witness", witnesses.values())
 def test_is_entangled_bell_state_pure_state(witness):
     state = create_bell_pure_state()
     is_entangled = witness(state)
-    assert is_entangled is True
+    assert is_entangled == True
 
 @pytest.mark.parametrize("witness", witnesses.values())
 def test_is_entangled_bell_state_pure_state_dm(witness):
     state = create_bell_pure_state_dm()
     is_entangled = witness(state)
-    assert is_entangled is True
+    assert is_entangled == True
 
 @pytest.mark.parametrize("witness", witnesses.values())
 def test_is_entangled_not_entangled_pure_state(witness):
     state = create_not_entangled_pure_state()
     is_entangled = witness(state)
-    assert is_entangled is False
+    assert is_entangled == False
     
 @pytest.mark.parametrize("witness", witnesses.values())
 def test_is_entangled_not_entangled_pure_state_dm(witness):
     state = create_not_entangled_pure_state_dm()
     is_entangled = witness(state)
-    assert is_entangled is False
-
-@pytest.mark.parametrize("witness", witnesses.values())
-def test_is_entangled_bell_states_mixed(witness):
-    state = create_mixed_bell_state_dm(probability=0.8)
-    is_entangled = witness(state)
-    assert is_entangled is True 
-
-@pytest.mark.parametrize("witness", witnesses.values())
-def test_is_entangled_not_entangled_states_mixed(witness):
-    state = create_mixed_not_entangled_state_dm()
-    is_entangled = witness(state)
-    assert is_entangled is False
+    assert is_entangled == False
