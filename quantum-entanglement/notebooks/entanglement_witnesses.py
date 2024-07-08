@@ -87,10 +87,20 @@ def is_entangled_negativity(state, tolerance=1e-10):
     negativity = sum(abs(e) for e in eigenvalues if e < 0)
     return negativity > tolerance
 
+
+def is_entangled_ppt(state, tolerance=1e-10):
+    if state.isket:
+        state = state * state.dag() 
+        
+    partial_transposed_state = partial_transpose(state, [0, 1])
+    eigenvalues = partial_transposed_state.eigenenergies()
+    return np.any((eigenvalues + tolerance) < 0)
+
 witnesses = {
     "CONCURRENCE": is_entangled_concurrence,
     "ENTROPY": is_entangled_entropy,
     "NEGATIVITY": is_entangled_negativity,
+    "PPT": is_entangled_ppt,
     "CHSH_OPTIMAL": is_entangled_chsh_optimal,
     "CHSH": is_entangled_chsh
 }
