@@ -8,3 +8,5 @@ minio==7.2.7
 apache-airflow==2.9.1
 boto
 boto3
+tpot==0.12.2
+torch==2.3.1

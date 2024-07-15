@@ -8,3 +8,5 @@ apache-airflow-providers-docker
 papermill
 minio==7.2.7
 tensorflow==2.16.1
+tpot==0.12.2
+torch==2.3.1
