@@ -107,7 +107,7 @@ def quantum_entanglement_classifier_ml_pipeline():
         # Task to run prediction from TPOT models
         run_predict_tpot_task = DockerOperator(
             task_id=f'run_predict-{witness_name}-TPOT',
-            image=QUANTUM_ENTANGLEMENT_IMAGE,
+            image=QUANTUM_ENTANGLEMENT_IMAGE, 
             api_version='auto',
             auto_remove=True,
             command=(
