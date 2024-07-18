@@ -2,7 +2,7 @@
 
 Personal projects to learn and to explore ML/MLOps techniques applied to quantum physics. 
 
-# quantum-entanglement
+# quantum-entanglement-simple
 
 - Simulation of 2-qubits (not) entangled states using QuTiP
 - Implementation of entanglement witnesses (CHSH, concurrence, entropy , PPT negativity)
