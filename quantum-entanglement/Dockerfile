@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies
-FROM jupyter/base-notebook:x86_64-python-3.11.6 AS dependencies
+FROM jupyter/base-notebook:x86_64-python-3.11.6 as dependencies
 
 # Copy requirements and constraints files
 COPY ./requirements-image.txt ./
