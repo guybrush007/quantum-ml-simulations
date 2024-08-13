@@ -155,7 +155,7 @@ cython_debug/
 # quantum entanglement
 .vscode/
 .virtual_documents/
-quantum-entanglement-simple/mlflow/mlflow.db
+quantum-entanglement-simple/mlflow/*
 quantum-entanglement-simple/minio/*
 quantum-entanglement-simple/config/*
 quantum-entanglement-simple/logs/*
